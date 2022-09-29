@@ -6,30 +6,28 @@
 
 {% block content %}
 
+<div class="container-xxl text-center w-100 m-auto">
 <div class = "login">
-
-    <h1>Login</h1>
-
+    <br>
+    <h1 style="font-weight:bold;">Login</h1>
+    <br>
     <form method="POST" action="">
         {% csrf_token %}
-        <table>
+        <table table class="m-auto w-auto">
             <tr>
-                <td>Username: </td>
                 <td><input type="text" name="username" placeholder="Username" class="form-control"></td>
             </tr>
                     
             <tr>
-                <td>Password: </td>
                 <td><input type="password" name="password" placeholder="Password" class="form-control"></td>
             </tr>
 
             <tr>
-                <td></td>
-                <td><input class="btn login_btn" type="submit" value="Login"></td>
+                <td><input class="w-100 btn btn-primary" type="submit" value="Login"></td>
             </tr>
         </table>
     </form>
-
+    <br>
     {% if messages %}
         <ul>
             {% for message in messages %}
@@ -41,5 +39,5 @@
     Belum mempunyai akun? <a href="{% url 'wishlist:register' %}">Buat Akun</a>
 
 </div>
-
+</div>
 {% endblock content %}
