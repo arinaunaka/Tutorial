@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block meta %}
+<title>Wishlist</title>
+<script>
+    $("#submit-form").submit(function (e) {
+        e.preventDefault();
+        var serializedData = $(this).serialize();
+        $.ajax({
+            type: 'POST',
+            url: "{% url 'submit_ajax' %}",
+            data: serializedData,
+            success: function (response) {
+                $("#submit-form").trigger('reset');
+
+                var barang = JSON.parse(response["barang"]);
+                $("#showdata tbody").prepend(
+                   `<tr>
+                    <td>${fields["nama_barang"]||""}</td>
+                    <td>${fields["harga_barang"]||""}</td>
+                    <td>${fields["deskripsi_barang"]||""}</td>
+                    </tr>`
+                )
+            },
+            error: function (response) {
+                // alert non successful response
+                alert(response["responseJSON"]["error"]);
+            }
+        })
+    })
+</script>                
+</script>
+{% endblock meta %}
+
+{% block content %}
+<nav class="navbar navbar-dark bg-dark">
+    <div class="container-fluid">
+        <a class="navbar-brand">Arina Aunaka</a>
+        <button class="btn btn-outline-danger" type="button" onclick="location.href='/wishlist/logout'">Logout</button>
+    </div>
+</nav>
+<br>
+
+<div class="container-xxl">
+    <h1 style="font-weight:bold;">Wishlist＼ʕ◕ᴥ◕＼ʔ</h1>
+    <h5 style="color:darkslategray">Hello, {{user.get_username}}!</h5>
+    <button class="btn btn-lg btn-outline-dark fw-bold mb-4" type="button" style="float:right; display:block; text-align:center;position:absolute;top:100px;right: 15px;">Get Wishlist</button>
+
+    <table class="table table-hover table-bordered mb-4" id="showdata">
+        <thead class="table-dark">
+            <tr>
+                <th>Nama Barang</th>
+                <th>Harga Barang</th>
+                <th>Deskripsi Barang</th>            
+            </tr>
+        </thead>
+        <tbody>
+            {% for barang in list_barang %}
+        <tr>
+            <td>{{barang.nama_barang}}</td>
+            <td>{{barang.harga_barang}}</td>
+            <td>{{barang.deskripsi}}</td>
+        </tr>
+        {% endfor %}        
+        </tbody>
+    </table>
+    <div class="submit-form container text-center m-auto" style="width: 800px">
+        <form id="submit-form"></form>
+        {% csrf_token %}
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="nama_barang" placeholder="Nama Barang" name="nama_barang" required>
+            <label for="nama_barang">Nama Barang</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="harga_barang" placeholder="Harga Barang" name="harga_barang" required>
+            <label for="harga_barang">Harga Barang</label>
+        </div>
+        <div class="form-floating mb-3">
+            <input type="text" class="form-control" id="deskripsi_barang" placeholder="Deskripsi Barang" name="deskripsi_barang" required>
+            <label for="deskripsi_barang">Deskripsi Barang</label>
+        </div>
+        <input class="btn btn-lg btn-outline-dark fw-bold mb-4" type="submit" value="Add Wishlist +"/>
+    </div>
+    <p class="text-muted">Sesi terakhir login: {{ last_login }}<p>
+</div>
+{% endblock content %}
+</html>
